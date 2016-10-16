@@ -1,0 +1,86 @@
+{% extends 'transform/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %} Edit Electronic Files {% endblock %}
+{% block header1 %} Edit Electronic Files to DNA Sequences {% endblock %}
+
+{% block content1 %} 
+<div>
+	<p>Choose a file (almost any kind), enter a secret token for encryption purpose, and then click Encode! The encoded DNA sequences will be ready for download in a blink or a couple of minutes, depending on your file size.</p>
+	<p>NOTES: Both the file name and the token should not be more than 256 characters. The uppe file size limit is 50 MiB and this limit is imposed due to the workload reason.  </p>	
+
+   </div>
+   <br />
+   <form class="form-horizontal" enctype="multipart/form-data" method="post" action="{% url "edit" %}">
+   	{% csrf_token %}
+   	{% for hidden in edit_form.hidden_fields %}
+   		{{ hiden }}
+	{% endfor %}
+
+	<br />
+	<div class="form-group">
+	<style type="text/css">
+		textarea{height: 100px;width: 300px;
+
+		}
+	</style>
+	   {{edit_form.edit_token1.errors}}
+	   <label for="{{encode_form.edit_token1.id_for_label}}" class="control-label ">original fragment: </label>
+	   <div class="controls" >
+	   <textarea type="text" class="input-xlarge" name="{{ edit_form.edit_token1.html_name}}" placeholder="{{edit_form.edit_token1.help_text}}" required autofocus style="height: 200px; width: 900px; font-size: 12px;">ACCAGTGCTCCCCAGCTAGACCAGCTGGCAGAAAGATTAGACCCGTTAGGAAGGACGTTGAGATACAATTCATGTCCTCTCCATCACGCCTTGCTAGCGATCAAGCGTCCGAATCGCACTGAACCATATGGCAGCCTACGATCCCGTGATATTGTCCGGCACAAAGGTACTACGCGGATACTAACAGTAATTATCACAACGGTTTATCGTCAAAT,
+GTGCGCGGTATCGTCTTCTGCCTGGCCCAAAGGTGCACTGAACTCGGTCTAAGGTTTTTGGACAAACGAGCATCCAATATACGCAGGATTTGCAACACGTATAGAATGAGAGATGTCGAATTAGAAGCTAGGGGAAGCCTCCGGTGGCGATGAGAAACCGCAAGTATTATATATTAACACTGCCCAGTACGCCCGCATCTGGTTGTTCAGCGCGA,
+ATGCTGTCTATATTCAGTCGCCAAGTCTCCGACATTCTGTGCTTCACAAGCAGTGCCTCTACATGTCAACAAAAGCACCAGCCCAAGTGCGTGGAAAAAGTAAATGCGTAAGATTATCTACGTTCACCAAGAGCGTATGGCTCCCTCGAGGTCCTTATGGGAACAATAAACGCGGCTCTGGGAGGGAAAGATTAGGACGTGGCTGATTCCGTATA,
+TATGATATGCCTGACTTATCCCAACGAATGCCGCCTCGGTTACTTAAGAAACCGAATAATACGGGGCGGTACCGAGGCGGCCGTGCTGCGCTTGAAGAGAGGCATATCATAACGCAGCTAGGCGTGTTCTTTGTCAGCCTCCCCATCCGCAGACGCATCGATGATGTAATGCGCTCGCTCGATCCGGTTCCGATACAATGACACCCCATCTGGCA,</textarea>
+           </div>
+	</div>
+	<br>		
+	<div class="form-group">
+	   {{edit_form.edit_token2.errors}}
+	   <label for="{{edit_form.edit_token2.id_for_label}}" class="control-label " >edited fragment: </label>
+	   <div class="controls" >
+	   	<textarea type="text" class="input-xlarge" name="{{ edit_form.edit_token2.html_name}}" placeholder="{{encode_form.edit_token2.help_text}}" required autofocus style="height: 200px; width: 900px; font-size: 12px;">ACCAGTGCTCCCCAGCTAGACCAGCTGGCAGAAAGATTAGACAATTCATGTCCTCCGTTGAGATACAATTCATGTCCTCTCCATCACGCCTTGCTAGCGATCAAGCGTCCGAATCGCACTGAACCATATGGCAGCCTACGATCCCGTGATATTGTCCGGCACAAAGGTACTACGCGGATACTAACAGTAATTATCACAACGGTTTATCGTCAAAT,
+GTGCGCGGTATCGTCTTCTGCCTGGCCCAAAGGTGCACTGAACTCGGTCTAAGGTTTTTGGACAAACGAGCATCCAATATACGCAGGATTTGCAACACGTATAGAATGAGAGATGTCGAATTAGAAGCTAGGGGAAGCCTCCGGTGGCGATGAGAAACCGCAAGTATTATATATTAACACTGCCCAGTACGCCCGCATCTGGTTGTTCAGCGCGA,
+ATGCTGTCTATATTCAGTCGCCAAGTCTCCGACATTCTGTGCTTCACAAGCAGTGCCTCTACATGTCAACAAAAGCACCAGCCCAAGTGCGTGGAAAAAGTAAATGCGTAAGATTATCTACGTTCACCAAGAGCGTATGGCTCCCTCGAGGTCCTTATGGGAACAATAAACGCGGCTCTGGGAGGGAAAGATTAGGACGTGGCTGATTCCGTATA,
+TATGATATGCCTGACTTATCCCAACGAATGCCGCCTCGGTTACTTAAGAAACCGAATAATACGGGGCGGTACCGAGGCGGCCGTGCTGCGCTTGAAGAGAGGCATATCATAACGCAGCTAGGCGTGTTCTTTGTCAGCCTCCCCATCCGCAGACGCGCTCTGGGAGTAATGCGCTCGCTCGATCCGGTTCCGATACAATGACACCCCATCTGGCA,</textarea>
+           </div>
+	</div>
+	<br />
+
+	<br />
+	<div class="form-group">
+	   <div class="controls">
+      	      <button class="btn btn-success" type="submit" name="edit" value="edit">Submit!</button>
+     	   </div>
+	</div>
+    </form>
+{% endblock %}
+
+
+
+{% block content2 %}
+<div style="width: 950px;">
+  {% if results %}
+    <h3>Results</h3>
+    <div id="results">
+	   <p>
+	   {% for key,value in results %}
+	   <b>{{ key }}: </b><br>{{ value }}<br>
+	   {% endfor %}
+	   </p>
+    </div>
+
+  
+  {% else %}
+    {% if errors %}
+    <h3>Something Goes Wrong!</h3>
+    <div id="errors">
+       {{errors}}
+    </div>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
+<br />
+<br />
